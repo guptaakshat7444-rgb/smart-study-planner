@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Study Session | Smart Study Planner{% endblock %}
+
+{% block page_heading %}Add Study Session{% endblock %}
+
+{% block content %}
+<div class="container">
+
+        
+
+        <form method="POST">
+
+            <label>
+                Topic
+            </label>
+
+            <br>
+
+            <select name="topic_id" required>
+
+                <option value="">
+                    Select Topic
+                </option>
+
+                {% for topic in topics %}
+
+                    <option value="{{ topic['topic_id'] }}">
+
+                        {{ topic['subject_name'] }}
+                        -
+                        {{ topic['topic_name'] }}
+
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+            <br><br>
+
+
+            <label>
+                Session Date
+            </label>
+
+            <br>
+
+            <input
+                type="date"
+                name="session_date"
+                required
+            >
+
+            <br><br>
+
+
+            <label>
+                Start Time
+            </label>
+
+            <br>
+
+            <input
+                type="time"
+                name="start_time"
+            >
+
+            <br><br>
+
+
+            <label>
+                Duration (minutes)
+            </label>
+
+            <br>
+
+            <input
+                type="number"
+                name="duration_minutes"
+                min="1"
+                value="60"
+                required
+            >
+
+            <br><br>
+
+
+            <label>
+                Status
+            </label>
+
+            <br>
+
+            <select name="status" required>
+
+                <option value="Planned">
+                    Planned
+                </option>
+
+                <option value="Completed">
+                    Completed
+                </option>
+
+                <option value="Skipped">
+                    Skipped
+                </option>
+
+                <option value="Cancelled">
+                    Cancelled
+                </option>
+
+            </select>
+
+            <br><br>
+
+
+            <label>
+                Notes
+            </label>
+
+            <br>
+
+            <textarea
+                name="notes"
+                placeholder="What will you study?"
+            ></textarea>
+
+            <br><br>
+
+
+            <button type="submit">
+                Add Session
+            </button>
+
+        </form>
+
+        <br>
+
+        <a href="{{ url_for('sessions') }}">
+            Back to Sessions
+        </a>
+
+    </div>
+{% endblock %}

@@ -1,0 +1,158 @@
+/* Shared styling for pages migrated to base.html */
+.page-content .container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0;
+    padding: 0;
+}
+
+.page-content .container > h2 {
+    margin: 0 0 18px;
+    color: var(--text-main);
+}
+
+.page-content .container > form {
+    max-width: 760px;
+    padding: 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+}
+
+.page-content .container label {
+    display: inline-block;
+    margin: 4px 0 7px;
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+.page-content .container input:not([type="checkbox"]),
+.page-content .container select,
+.page-content .container textarea {
+    width: 100%;
+    max-width: 100%;
+    min-height: 42px;
+    padding: 10px 12px;
+    color: var(--text-main);
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    font: inherit;
+    box-sizing: border-box;
+}
+
+.page-content .container textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.page-content .container input:focus,
+.page-content .container select:focus,
+.page-content .container textarea:focus {
+    outline: 2px solid var(--primary-light);
+    border-color: var(--primary);
+}
+
+.page-content .container button,
+.page-content .container a.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 10px 16px;
+    color: #ffffff;
+    background: var(--primary);
+    border: 0;
+    border-radius: 9px;
+    font: inherit;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.page-content .container button:hover,
+.page-content .container a.button:hover {
+    background: var(--primary-dark);
+}
+
+.page-content .container a {
+    color: var(--primary-dark);
+    font-weight: 600;
+}
+
+.page-content .container .exam-card,
+.page-content .container .topic-card,
+.page-content .container .session-card,
+.page-content .container .progress-card,
+.page-content .container .preference-card,
+.page-content .container .availability-card,
+.page-content .container .study-session,
+.page-content .container .study-date {
+    margin: 0 0 18px;
+    padding: 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+}
+
+.page-content .container .study-date {
+    margin-top: 22px;
+}
+
+.page-content .container .study-date h2 {
+    margin-top: 0;
+}
+
+.page-content .container .daily-summary,
+.page-content .container .session-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.page-content .container .status {
+    display: inline-block;
+    padding: 4px 9px;
+    border-radius: 999px;
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.page-content .container .complete-button {
+    background: var(--primary);
+}
+
+.page-content .container .skip-button {
+    background: var(--warning);
+}
+
+.page-content .container .empty-state {
+    padding: 24px;
+    color: var(--text-muted);
+    background: var(--surface-soft);
+    border: 1px dashed var(--border);
+    border-radius: 14px;
+}
+
+@media (max-width: 700px) {
+    .page-content .container > form {
+        padding: 18px;
+    }
+
+    .page-content .container .exam-card,
+    .page-content .container .topic-card,
+    .page-content .container .session-card,
+    .page-content .container .progress-card,
+    .page-content .container .preference-card,
+    .page-content .container .availability-card,
+    .page-content .container .study-session,
+    .page-content .container .study-date {
+        padding: 16px;
+    }
+}

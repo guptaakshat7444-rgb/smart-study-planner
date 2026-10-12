@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Subject | Smart Study Planner{% endblock %}
+
+{% block page_heading %}Edit Subject{% endblock %}
+
+{% block content %}
+<form method="POST">
+
+        <label>Subject Name</label>
+        <br>
+
+        <input
+            type="text"
+            name="name"
+            value="{{ subject['name'] }}"
+            required
+        >
+
+        <br><br>
+
+        <label>Description</label>
+        <br>
+
+        <textarea name="description">{{ subject['description'] or '' }}</textarea>
+
+        <br><br>
+
+        <button type="submit">
+            Update Subject
+        </button>
+
+    </form>
+
+    <br>
+
+    <a href="{{ url_for('subjects') }}">
+        Back to Subjects
+    </a>
+{% endblock %}

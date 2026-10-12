@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}Topics | Smart Study Planner{% endblock %}
+
+{% block page_heading %}Topics{% endblock %}
+
+{% block content %}
+<div class="container">
+
+        
+
+        <h2>Topics</h2>
+
+        <a href="{{ url_for('add_topic',
+                            subject_id=subject['subject_id']) }}">
+            <button>Add Topic</button>
+        </a>
+
+        <br><br>
+
+        {% if topics %}
+
+            {% for topic in topics %}
+
+                <div class="topic-card">
+
+                    <h3>{{ topic["name"] }}</h3>
+
+                    <p>
+                        {{ topic["description"] or "No description" }}
+                    </p>
+
+                    <p>
+                        <strong>Difficulty:</strong>
+                        {{ topic["difficulty"] }}/5
+                    </p>
+
+                    <p>
+                        <strong>Priority:</strong>
+                        {{ topic["priority"] }}/5
+                    </p>
+
+                    <p>
+                        <strong>Estimated Hours:</strong>
+                        {{ topic["estimated_hours"] }}
+                    </p>
+
+                    <a href="{{ url_for('edit_topic',
+                                        topic_id=topic['topic_id']) }}">
+                        Edit
+                    </a>
+
+                    <form
+                        action="{{ url_for('delete_topic',
+                                           topic_id=topic['topic_id']) }}"
+                        method="POST"
+                        style="display:inline;"
+                    >
+
+                        <button
+                            type="submit"
+                            onclick="return confirm('Delete this topic?')"
+                        >
+                            Delete
+                        </button>
+
+                    </form>
+
+                </div>
+
+                <hr>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p>No topics found for this subject.</p>
+
+        {% endif %}
+
+        <br>
+
+        <a href="{{ url_for('subjects') }}">
+            Back to Subjects
+        </a>
+
+    </div>
+{% endblock %}

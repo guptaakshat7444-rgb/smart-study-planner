@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Topic | Smart Study Planner{% endblock %}
+
+{% block page_heading %}Edit Topic{% endblock %}
+
+{% block content %}
+<div class="container">
+
+        
+
+        <form method="POST">
+
+            <label>Topic Name</label>
+            <br>
+
+            <input
+                type="text"
+                name="name"
+                value="{{ topic['name'] }}"
+                required
+            >
+
+            <br><br>
+
+            <label>Description</label>
+            <br>
+
+            <textarea name="description">{{ topic["description"] or "" }}</textarea>
+
+            <br><br>
+
+            <label>Difficulty (1-5)</label>
+            <br>
+
+            <input
+                type="number"
+                name="difficulty"
+                min="1"
+                max="5"
+                value="{{ topic['difficulty'] }}"
+                required
+            >
+
+            <br><br>
+
+            <label>Priority (1-5)</label>
+            <br>
+
+            <input
+                type="number"
+                name="priority"
+                min="1"
+                max="5"
+                value="{{ topic['priority'] }}"
+                required
+            >
+
+            <br><br>
+
+            <label>Estimated Hours</label>
+            <br>
+
+            <input
+                type="number"
+                name="estimated_hours"
+                min="0.5"
+                step="0.5"
+                value="{{ topic['estimated_hours'] }}"
+                required
+            >
+
+            <br><br>
+
+            <button type="submit">
+                Update Topic
+            </button>
+
+        </form>
+
+        <br>
+
+        <a href="{{ url_for('topics',
+                            subject_id=topic['subject_id']) }}">
+            Back to Topics
+        </a>
+
+    </div>
+{% endblock %}

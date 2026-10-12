@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Availability | Smart Study Planner{% endblock %}
+
+{% block page_heading %}Add Study Availability{% endblock %}
+
+{% block content %}
+<div class="container">
+
+        
+
+        <form method="POST">
+
+            <label>
+                Date
+            </label>
+
+            <br>
+
+            <input
+                type="date"
+                name="available_date"
+                required
+            >
+
+            <br><br>
+
+
+            <label>
+                Available Hours
+            </label>
+
+            <br>
+
+            <input
+                type="number"
+                name="available_hours"
+                min="0"
+                step="0.5"
+                placeholder="Example: 4"
+                required
+            >
+
+            <br><br>
+
+
+            <label>
+                Start Time
+            </label>
+
+            <br>
+
+            <input
+                type="time"
+                name="start_time"
+            >
+
+            <br><br>
+
+
+            <label>
+                End Time
+            </label>
+
+            <br>
+
+            <input
+                type="time"
+                name="end_time"
+            >
+
+            <br><br>
+
+
+            <button type="submit">
+                Add Availability
+            </button>
+
+        </form>
+
+        <br>
+
+        <a href="{{ url_for('availability') }}">
+            Back to Availability
+        </a>
+
+    </div>
+{% endblock %}

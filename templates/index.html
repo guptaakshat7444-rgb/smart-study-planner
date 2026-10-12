@@ -1,0 +1,282 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard | Smart Study Planner
+{% endblock %}
+
+{% block page_heading %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-page">
+
+    <div class="dashboard-intro">
+        <div>
+            <h2>Study overview</h2>
+            <p>
+                Stay on top of your subjects, exams, and study sessions.
+            </p>
+        </div>
+
+        <a
+            href="{{ url_for('study_plan') }}"
+            class="dashboard-button"
+        >
+            View Study Plan
+        </a>
+    </div>
+
+    <section class="dashboard-stats">
+
+        <div class="dashboard-card">
+            <span class="dashboard-card-label">
+                Planned Sessions
+            </span>
+
+            <strong class="dashboard-card-number">
+                {{ session_counts["Planned"] }}
+            </strong>
+
+            <span class="dashboard-card-note">
+                Upcoming study sessions
+            </span>
+        </div>
+
+        <div class="dashboard-card">
+            <span class="dashboard-card-label">
+                Completed Sessions
+            </span>
+
+            <strong class="dashboard-card-number">
+                {{ session_counts["Completed"] }}
+            </strong>
+
+            <span class="dashboard-card-note">
+                Sessions completed
+            </span>
+        </div>
+
+        <div class="dashboard-card">
+            <span class="dashboard-card-label">
+                Study Time
+            </span>
+
+            <strong class="dashboard-card-number">
+                {{ "%.1f"|format(stats["completed_hours"] or 0) }}
+            </strong>
+
+            <span class="dashboard-card-note">
+                Hours completed
+            </span>
+        </div>
+
+        <div class="dashboard-card">
+            <span class="dashboard-card-label">
+                Topics Completed
+            </span>
+
+            <strong class="dashboard-card-number">
+                {{ stats["completed_topics"] or 0 }}
+                /
+                {{ stats["total_topics"] or 0 }}
+            </strong>
+
+            <span class="dashboard-card-note">
+                Topics finished
+            </span>
+        </div>
+
+    </section>
+
+    <section class="dashboard-panel">
+
+        <div class="dashboard-panel-header">
+
+            <div>
+                <h2>Overall Progress</h2>
+
+                <p>
+                    {{ "%.1f"|format(overall_progress) }}%
+                    of estimated study time completed
+                </p>
+            </div>
+
+            <strong>
+                {{ "%.1f"|format(overall_progress) }}%
+            </strong>
+
+        </div>
+
+        <div class="dashboard-progress-track">
+            <div
+                class="dashboard-progress-fill"
+                style="width: {{ overall_progress }}%;">
+            </div>
+        </div>
+
+    </section>
+
+    <section class="dashboard-grid">
+
+        <div class="dashboard-panel">
+
+            <div class="dashboard-panel-header">
+                <h2>Upcoming Exams</h2>
+
+                <a href="{{ url_for('exams') }}">
+                    View All
+                </a>
+            </div>
+
+            {% if upcoming_exams %}
+
+                <div class="dashboard-list">
+
+                    {% for exam in upcoming_exams %}
+
+                        <div class="dashboard-list-item">
+
+                            <div>
+                                <strong>
+                                    {{ exam["exam_name"] }}
+                                </strong>
+
+                                <span>
+                                    {{ exam["subject_name"] }}
+                                </span>
+                            </div>
+
+                            <time>
+                                {{ exam["exam_date"] }}
+                            </time>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="dashboard-empty">
+                    No upcoming exams.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+        <div class="dashboard-panel">
+
+            <div class="dashboard-panel-header">
+                <h2>Upcoming Sessions</h2>
+
+                <a href="{{ url_for('study_plan') }}">
+                    View Plan
+                </a>
+            </div>
+
+            {% if upcoming_sessions %}
+
+                <div class="dashboard-list">
+
+                    {% for session in upcoming_sessions %}
+
+                        <div class="dashboard-list-item">
+
+                            <div>
+                                <strong>
+                                    {{ session["topic_name"] }}
+                                </strong>
+
+                                <span>
+                                    {{ session["subject_name"] }}
+                                </span>
+                            </div>
+
+                            <time>
+                                {{ session["session_date"] }}
+                                ·
+                                {{ session["start_time"] }}
+                            </time>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="dashboard-empty">
+                    No upcoming study sessions.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+    <section class="dashboard-panel">
+
+        <div class="dashboard-panel-header">
+            <h2>Quick Actions</h2>
+        </div>
+
+        <div class="quick-actions">
+
+            <a
+                href="{{ url_for('subjects') }}"
+                class="quick-action"
+            >
+                <strong>Subjects</strong>
+                <span>Manage subjects</span>
+            </a>
+
+            <a href="{{ url_for('subjects') }}" class="quick-action">
+                <strong>Topics</strong>
+                <span>Manage study topics</span>
+            </a>
+
+            <a
+                href="{{ url_for('progress') }}"
+                class="quick-action"
+            >
+                <strong>Progress</strong>
+                <span>Track topic progress</span>
+            </a>
+
+            <a
+                href="{{ url_for('exams') }}"
+                class="quick-action"
+            >
+                <strong>Exams</strong>
+                <span>Manage exams</span>
+            </a>
+
+            <a
+                href="{{ url_for('availability') }}"
+                class="quick-action"
+            >
+                <strong>Availability</strong>
+                <span>Manage study time</span>
+            </a>
+
+            <a
+                href="{{ url_for('preferences') }}"
+                class="quick-action"
+            >
+                <strong>Preferences</strong>
+                <span>Configure planner</span>
+            </a>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}

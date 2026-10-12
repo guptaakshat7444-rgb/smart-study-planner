@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Sessions | Smart Study Planner{% endblock %}
+
+{% block page_heading %}Study Sessions{% endblock %}
+
+{% block content %}
+<div class="container">
+
+        
+
+        <a href="{{ url_for('add_session') }}">
+            <button>Add Study Session</button>
+        </a>
+
+        <br><br>
+
+        {% if sessions %}
+
+            {% for session in sessions %}
+
+                <div class="session-card">
+
+                    <h2>
+                        {{ session["topic_name"] }}
+                    </h2>
+
+                    <p>
+                        <strong>Subject:</strong>
+                        {{ session["subject_name"] }}
+                    </p>
+
+                    <p>
+                        <strong>Date:</strong>
+                        {{ session["session_date"] }}
+                    </p>
+
+                    <p>
+                        <strong>Start Time:</strong>
+                        {{ session["start_time"] or "Not specified" }}
+                    </p>
+
+                    <p>
+                        <strong>Duration:</strong>
+                        {{ session["duration_minutes"] }}
+                        minutes
+                    </p>
+
+                    <p>
+                        <strong>Status:</strong>
+                        {{ session["status"] }}
+                    </p>
+
+                    <p>
+                        <strong>Notes:</strong>
+                        {{ session["notes"] or "No notes" }}
+                    </p>
+
+                    <a href="{{ url_for(
+                        'edit_session',
+                        session_id=session['session_id']
+                    ) }}">
+                        Edit
+                    </a>
+
+                    <form
+                        action="{{ url_for(
+                            'delete_session',
+                            session_id=session['session_id']
+                        ) }}"
+                        method="POST"
+                        style="display:inline;"
+                    >
+
+                        <button
+                            type="submit"
+                            onclick="return confirm(
+                                'Delete this study session?'
+                            )"
+                        >
+                            Delete
+                        </button>
+
+                    </form>
+
+                </div>
+
+                <hr>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p>
+                No study sessions found.
+            </p>
+
+        {% endif %}
+
+        <br>
+
+        <a href="{{ url_for('home') }}">
+            Back to Home
+        </a>
+
+    </div>
+{% endblock %}

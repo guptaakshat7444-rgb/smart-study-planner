@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Session | Smart Study Planner{% endblock %}
+
+{% block page_heading %}Edit Study Session{% endblock %}
+
+{% block content %}
+<div class="container">
+
+        
+
+        <form method="POST">
+
+
+            <label>
+                Topic
+            </label>
+
+            <br>
+
+            <select name="topic_id" required>
+
+                {% for topic in topics %}
+
+                    <option
+                        value="{{ topic['topic_id'] }}"
+
+                        {% if topic['topic_id'] == session['topic_id'] %}
+                            selected
+                        {% endif %}
+                    >
+
+                        {{ topic['subject_name'] }}
+                        -
+                        {{ topic['topic_name'] }}
+
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+            <br><br>
+
+
+            <label>
+                Session Date
+            </label>
+
+            <br>
+
+            <input
+                type="date"
+                name="session_date"
+                value="{{ session['session_date'] }}"
+                required
+            >
+
+            <br><br>
+
+
+            <label>
+                Start Time
+            </label>
+
+            <br>
+
+            <input
+                type="time"
+                name="start_time"
+                value="{{ session['start_time'] or '' }}"
+            >
+
+            <br><br>
+
+
+            <label>
+                Duration (minutes)
+            </label>
+
+            <br>
+
+            <input
+                type="number"
+                name="duration_minutes"
+                min="1"
+                value="{{ session['duration_minutes'] }}"
+                required
+            >
+
+            <br><br>
+
+
+            <label>
+                Status
+            </label>
+
+            <br>
+
+            <select name="status" required>
+
+                <option value="Planned"
+                    {% if session['status'] == 'Planned' %}
+                        selected
+                    {% endif %}>
+                    Planned
+                </option>
+
+                <option value="Completed"
+                    {% if session['status'] == 'Completed' %}
+                        selected
+                    {% endif %}>
+                    Completed
+                </option>
+
+                <option value="Skipped"
+                    {% if session['status'] == 'Skipped' %}
+                        selected
+                    {% endif %}>
+                    Skipped
+                </option>
+
+                <option value="Cancelled"
+                    {% if session['status'] == 'Cancelled' %}
+                        selected
+                    {% endif %}>
+                    Cancelled
+                </option>
+
+            </select>
+
+            <br><br>
+
+
+            <label>
+                Notes
+            </label>
+
+            <br>
+
+            <textarea name="notes">{{ session['notes'] or '' }}</textarea>
+
+            <br><br>
+
+
+            <button type="submit">
+                Update Session
+            </button>
+
+        </form>
+
+        <br>
+
+        <a href="{{ url_for('sessions') }}">
+            Cancel
+        </a>
+
+    </div>
+{% endblock %}

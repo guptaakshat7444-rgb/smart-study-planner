@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Exam | Smart Study Planner{% endblock %}
+
+{% block page_heading %}Add Exam{% endblock %}
+
+{% block content %}
+<div class="container">
+
+        
+
+        <form method="POST">
+
+            <label>Exam Name</label>
+            <br>
+
+            <input
+                type="text"
+                name="exam_name"
+                placeholder="Example: DBMS Final Exam"
+                required
+            >
+
+            <br><br>
+
+            <label>Subject</label>
+            <br>
+
+            <select name="subject_id" required>
+
+                <option value="">
+                    Select Subject
+                </option>
+
+                {% for subject in subjects %}
+
+                    <option value="{{ subject['subject_id'] }}">
+                        {{ subject['name'] }}
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+            <br><br>
+
+            <label>Exam Date</label>
+            <br>
+
+            <input
+                type="date"
+                name="exam_date"
+                required
+            >
+
+            <br><br>
+
+            <label>Exam Type</label>
+            <br>
+
+            <select name="exam_type" required>
+
+                <option value="Minor">Minor</option>
+                <option value="Midterm">Midterm</option>
+                <option value="Final">Final</option>
+                <option value="Assignment">Assignment</option>
+                <option value="Practical">Practical</option>
+                <option value="Other">Other</option>
+
+            </select>
+
+            <br><br>
+
+            <button type="submit">
+                Add Exam
+            </button>
+
+        </form>
+
+        <br>
+
+        <a href="{{ url_for('exams') }}">
+            Back to Exams
+        </a>
+
+    </div>
+{% endblock %}

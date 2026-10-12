@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}Update Progress | Smart Study Planner{% endblock %}
+
+{% block page_heading %}Update Topic Progress{% endblock %}
+
+{% block content %}
+<div class="container">
+
+        
+
+        <h2>
+            {{ topic["name"] }}
+        </h2>
+
+        <p>
+            Subject:
+            {{ topic["subject_name"] }}
+        </p>
+
+        <p>
+            Estimated Hours:
+            {{ topic["estimated_hours"] }}
+        </p>
+
+
+        <form method="POST">
+
+
+            <!-- Progress Percentage -->
+
+            <label>
+                Progress Percentage
+            </label>
+
+            <br>
+
+            <input
+                type="number"
+                name="progress_percentage"
+                min="0"
+                max="100"
+                value="{% if progress %}{{ progress['progress_percentage'] }}{% else %}0{% endif %}"
+                required
+            >
+
+            <br><br>
+
+
+            <!-- Completed Hours -->
+
+            <label>
+                Completed Hours
+            </label>
+
+            <br>
+
+            <input
+                type="number"
+                name="completed_hours"
+                min="0"
+                max="{{ topic['estimated_hours'] }}"
+                step="0.1"
+                value="{% if progress %}{{ progress['completed_hours'] }}{% else %}0{% endif %}"
+                required
+            >
+
+            <br><br>
+
+
+            <!-- Last Studied -->
+
+            <label>
+                Last Studied
+            </label>
+
+            <br>
+
+            <input
+                type="datetime-local"
+                name="last_studied_at"
+                value="{% if progress and progress['last_studied_at'] %}{{ progress['last_studied_at'].replace(' ', 'T') }}{% endif %}"
+            >
+
+            <br><br>
+
+
+            <!-- Completed -->
+
+            <label>
+
+                <input
+                    type="checkbox"
+                    name="is_completed"
+                    {% if progress and progress["is_completed"] == 1 %}
+                        checked
+                    {% endif %}
+                >
+
+                Mark as Completed
+
+            </label>
+
+            <br><br>
+
+
+            <button type="submit">
+                Save Progress
+            </button>
+
+        </form>
+
+        <br>
+
+        <a href="{{ url_for('progress') }}">
+            Cancel
+        </a>
+
+    </div>
+{% endblock %}

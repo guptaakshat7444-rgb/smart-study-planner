@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Preferences | Smart Study Planner{% endblock %}
+
+{% block page_heading %}Study Preferences{% endblock %}
+
+{% block content %}
+<div class="container">
+
+        
+
+        {% if preferences %}
+
+            <div class="preference-card">
+
+                <p>
+                    <strong>Preferred Study Time:</strong>
+                    {{ preferences["preferred_time"] }}
+                </p>
+
+                <p>
+                    <strong>Daily Study Hours:</strong>
+                    {{ preferences["daily_study_hours"] }}
+                    hours
+                </p>
+
+                <p>
+                    <strong>Session Duration:</strong>
+                    {{ preferences["preferred_session_minutes"] }}
+                    minutes
+                </p>
+
+                <p>
+                    <strong>Break Duration:</strong>
+                    {{ preferences["break_minutes"] }}
+                    minutes
+                </p>
+
+            </div>
+
+            <br>
+
+            <a href="{{ url_for('edit_preferences') }}">
+                <button>Edit Preferences</button>
+            </a>
+
+        {% else %}
+
+            <p>
+                No study preferences have been set yet.
+            </p>
+
+            <a href="{{ url_for('edit_preferences') }}">
+                <button>Set Preferences</button>
+            </a>
+
+        {% endif %}
+
+        <br><br>
+
+        <a href="{{ url_for('home') }}">
+            Back to Home
+        </a>
+
+    </div>
+{% endblock %}

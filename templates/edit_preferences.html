@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Preferences | Smart Study Planner{% endblock %}
+
+{% block page_heading %}Study Preferences{% endblock %}
+
+{% block content %}
+<div class="container">
+
+        
+
+        <form method="POST">
+
+            <!-- Preferred Study Time -->
+
+            <label>
+                Preferred Study Time
+            </label>
+
+            <br>
+
+            <select name="preferred_time" required>
+
+                <option value="Morning"
+                    {% if preferences
+                       and preferences["preferred_time"] == "Morning" %}
+                        selected
+                    {% endif %}>
+                    Morning
+                </option>
+
+                <option value="Afternoon"
+                    {% if preferences
+                       and preferences["preferred_time"] == "Afternoon" %}
+                        selected
+                    {% endif %}>
+                    Afternoon
+                </option>
+
+                <option value="Evening"
+                    {% if not preferences
+                       or preferences["preferred_time"] == "Evening" %}
+                        selected
+                    {% endif %}>
+                    Evening
+                </option>
+
+                <option value="Night"
+                    {% if preferences
+                       and preferences["preferred_time"] == "Night" %}
+                        selected
+                    {% endif %}>
+                    Night
+                </option>
+
+            </select>
+
+            <br><br>
+
+
+            <!-- Daily Study Hours -->
+
+            <label>
+                Daily Study Hours
+            </label>
+
+            <br>
+
+            <input
+                type="number"
+                name="daily_study_hours"
+                min="0.5"
+                step="0.5"
+                value="{% if preferences %}{{ preferences['daily_study_hours'] }}{% else %}3{% endif %}"
+                required
+            >
+
+            <br><br>
+
+
+            <!-- Session Duration -->
+
+            <label>
+                Preferred Session Duration
+            </label>
+
+            <br>
+
+            <input
+                type="number"
+                name="preferred_session_minutes"
+                min="1"
+                value="{% if preferences %}{{ preferences['preferred_session_minutes'] }}{% else %}60{% endif %}"
+                required
+            >
+
+            <br><br>
+
+
+            <!-- Break Duration -->
+
+            <label>
+                Break Duration
+            </label>
+
+            <br>
+
+            <input
+                type="number"
+                name="break_minutes"
+                min="0"
+                value="{% if preferences %}{{ preferences['break_minutes'] }}{% else %}10{% endif %}"
+                required
+            >
+
+            <br><br>
+
+            <button type="submit">
+                Save Preferences
+            </button>
+
+        </form>
+
+        <br>
+
+        <a href="{{ url_for('preferences') }}">
+            Cancel
+        </a>
+
+    </div>
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Exam | Smart Study Planner{% endblock %}
+
+{% block page_heading %}Edit Exam{% endblock %}
+
+{% block content %}
+<div class="container">
+
+        
+
+        <form method="POST">
+
+            <label>Exam Name</label>
+            <br>
+
+            <input
+                type="text"
+                name="exam_name"
+                value="{{ exam['exam_name'] }}"
+                required
+            >
+
+            <br><br>
+
+            <label>Subject</label>
+            <br>
+
+            <select name="subject_id" required>
+
+                {% for subject in subjects %}
+
+                    <option
+                        value="{{ subject['subject_id'] }}"
+                        {% if subject['subject_id'] == exam['subject_id'] %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ subject['name'] }}
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+            <br><br>
+
+            <label>Exam Date</label>
+            <br>
+
+            <input
+                type="date"
+                name="exam_date"
+                value="{{ exam['exam_date'] }}"
+                required
+            >
+
+            <br><br>
+
+            <label>Exam Type</label>
+            <br>
+
+            <select name="exam_type" required>
+
+                <option value="Minor"
+                    {% if exam['exam_type'] == 'Minor' %}
+                        selected
+                    {% endif %}>
+                    Minor
+                </option>
+
+                <option value="Midterm"
+                    {% if exam['exam_type'] == 'Midterm' %}
+                        selected
+                    {% endif %}>
+                    Midterm
+                </option>
+
+                <option value="Final"
+                    {% if exam['exam_type'] == 'Final' %}
+                        selected
+                    {% endif %}>
+                    Final
+                </option>
+
+                <option value="Assignment"
+                    {% if exam['exam_type'] == 'Assignment' %}
+                        selected
+                    {% endif %}>
+                    Assignment
+                </option>
+
+                <option value="Practical"
+                    {% if exam['exam_type'] == 'Practical' %}
+                        selected
+                    {% endif %}>
+                    Practical
+                </option>
+
+                <option value="Other"
+                    {% if exam['exam_type'] == 'Other' %}
+                        selected
+                    {% endif %}>
+                    Other
+                </option>
+
+            </select>
+
+            <br><br>
+
+            <button type="submit">
+                Update Exam
+            </button>
+
+        </form>
+
+        <br>
+
+        <a href="{{ url_for('exams') }}">
+            Back to Exams
+        </a>
+
+    </div>
+{% endblock %}

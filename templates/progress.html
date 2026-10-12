@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}Progress | Smart Study Planner{% endblock %}
+
+{% block page_heading %}Topic Progress{% endblock %}
+
+{% block content %}
+<div class="container">
+
+        
+
+        {% if progress_records %}
+
+            {% set current_subject = "" %}
+
+            {% for item in progress_records %}
+
+                {% if current_subject != item["subject_name"] %}
+
+                    {% set current_subject = item["subject_name"] %}
+
+                    <h2>
+                        {{ item["subject_name"] }}
+                    </h2>
+
+                {% endif %}
+
+
+                <div class="progress-card">
+
+                    <h3>
+                        {{ item["topic_name"] }}
+                    </h3>
+
+                    <p>
+                        <strong>Progress:</strong>
+                        {{ item["progress_percentage"] }}%
+                    </p>
+
+                    <p>
+                        <strong>Completed Hours:</strong>
+                        {{ item["completed_hours"] }}
+                        /
+                        {{ item["estimated_hours"] }}
+                        hours
+                    </p>
+
+                    <p>
+
+                        <strong>Status:</strong>
+
+                        {% if item["is_completed"] == 1 %}
+
+                            Completed
+
+                        {% else %}
+
+                            In Progress
+
+                        {% endif %}
+
+                    </p>
+
+                    <p>
+
+                        <strong>Last Studied:</strong>
+
+                        {% if item["last_studied_at"] %}
+
+                            {{ item["last_studied_at"] }}
+
+                        {% else %}
+
+                            Not studied yet
+
+                        {% endif %}
+
+                    </p>
+
+                    <a href="{{ url_for(
+                        'edit_progress',
+                        topic_id=item['topic_id']
+                    ) }}">
+
+                        <button>
+                            Update Progress
+                        </button>
+
+                    </a>
+
+                </div>
+
+                <hr>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p>
+                No progress records found.
+            </p>
+
+        {% endif %}
+
+        <br>
+
+        <a href="{{ url_for('home') }}">
+            Back to Home
+        </a>
+
+    </div>
+{% endblock %}

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+    <title>
+        {% block title %}Smart Study Planner{% endblock %}
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body>
+    <div class="app-layout">
+
+        <aside class="sidebar">
+
+            <div class="sidebar-brand">
+                <div class="brand-icon">S</div>
+
+                <div>
+                    <h2>Study Planner</h2>
+                    <span>Smart learning</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+
+                <a
+                    href="{{ url_for('home') }}"
+                    class="nav-item {% if request.endpoint == 'home' %}active{% endif %}"
+                >
+                    <span class="nav-icon">⌂</span>
+                    <span>Dashboard</span>
+                </a>
+
+                <div class="nav-section">
+                    STUDY
+                </div>
+
+                <a
+                    href="{{ url_for('subjects') }}"
+                    class="nav-item {% if request.endpoint in ['subjects', 'add_subject', 'edit_subject'] %}active{% endif %}"
+                >
+                    <span class="nav-icon">▣</span>
+                    <span>Subjects</span>
+                </a>
+
+                <a
+    href="{{ url_for('subjects') }}"
+    class="nav-item {% if request.endpoint in ['topics', 'add_topic', 'edit_topic'] %}active{% endif %}"
+>
+    <span class="nav-icon">◇</span>
+    <span>Topics</span>
+</a>
+
+                <a
+                    href="{{ url_for('progress') }}"
+                    class="nav-item {% if request.endpoint in ['progress', 'edit_progress'] %}active{% endif %}"
+                >
+                    <span class="nav-icon">◔</span>
+                    <span>Progress</span>
+                </a>
+
+                <a
+                    href="{{ url_for('sessions') }}"
+                    class="nav-item {% if request.endpoint in ['sessions', 'add_session', 'edit_session'] %}active{% endif %}"
+                >
+                    <span class="nav-icon">◷</span>
+                    <span>Sessions</span>
+                </a>
+
+                <a
+                    href="{{ url_for('study_plan') }}"
+                    class="nav-item {% if request.endpoint == 'study_plan' %}active{% endif %}"
+                >
+                    <span class="nav-icon">✓</span>
+                    <span>Study Plan</span>
+                </a>
+
+                <div class="nav-section">
+                    PLANNING
+                </div>
+
+                <a
+                    href="{{ url_for('exams') }}"
+                    class="nav-item {% if request.endpoint in ['exams', 'add_exam', 'edit_exam'] %}active{% endif %}"
+                >
+                    <span class="nav-icon">□</span>
+                    <span>Exams</span>
+                </a>
+
+                <a
+                    href="{{ url_for('availability') }}"
+                    class="nav-item {% if request.endpoint in ['availability', 'add_availability', 'edit_availability'] %}active{% endif %}"
+                >
+                    <span class="nav-icon">◫</span>
+                    <span>Availability</span>
+                </a>
+
+                <div class="nav-section">
+                    SETTINGS
+                </div>
+
+                <a
+                    href="{{ url_for('preferences') }}"
+                    class="nav-item {% if request.endpoint in ['preferences', 'edit_preferences'] %}active{% endif %}"
+                >
+                    <span class="nav-icon">⚙</span>
+                    <span>Preferences</span>
+                </a>
+
+            </nav>
+
+            <div class="sidebar-footer">
+                <span>Smart Study Planner</span>
+                <small>Personalized learning</small>
+            </div>
+
+        </aside>
+
+        <main class="main-content">
+
+            <header class="topbar">
+                <div>
+                    <span class="topbar-label">
+                        STUDY WORKSPACE
+                    </span>
+
+                    <h1>
+                        {% block page_heading %}
+                        {% endblock %}
+                    </h1>
+                </div>
+            </header>
+
+            <div class="page-content">
+                {% block content %}
+                {% endblock %}
+            </div>
+
+        </main>
+
+    </div>
+</body>
+</html>

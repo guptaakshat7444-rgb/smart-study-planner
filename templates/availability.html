@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}Availability | Smart Study Planner{% endblock %}
+
+{% block page_heading %}Study Availability{% endblock %}
+
+{% block content %}
+<div class="container">
+
+        
+
+        <a href="{{ url_for('add_availability') }}">
+            <button>Add Availability</button>
+        </a>
+
+        <br><br>
+
+        {% if availability %}
+
+            {% for item in availability %}
+
+                <div class="availability-card">
+
+                    <h2>
+                        {{ item["available_date"] }}
+                    </h2>
+
+                    <p>
+                        <strong>Available Hours:</strong>
+                        {{ item["available_hours"] }}
+                    </p>
+
+                    <p>
+                        <strong>Start Time:</strong>
+                        {{ item["start_time"] or "Not specified" }}
+                    </p>
+
+                    <p>
+                        <strong>End Time:</strong>
+                        {{ item["end_time"] or "Not specified" }}
+                    </p>
+
+                    <a href="{{ url_for(
+                        'edit_availability',
+                        availability_id=item['availability_id']
+                    ) }}">
+                        Edit
+                    </a>
+
+                    <form
+                        action="{{ url_for(
+                            'delete_availability',
+                            availability_id=item['availability_id']
+                        ) }}"
+                        method="POST"
+                        style="display:inline;"
+                    >
+
+                        <button
+                            type="submit"
+                            onclick="return confirm(
+                                'Delete this availability?'
+                            )"
+                        >
+                            Delete
+                        </button>
+
+                    </form>
+
+                </div>
+
+                <hr>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p>
+                No availability has been added.
+            </p>
+
+        {% endif %}
+
+        <br>
+
+        <a href="{{ url_for('home') }}">
+            Back to Home
+        </a>
+
+    </div>
+{% endblock %}

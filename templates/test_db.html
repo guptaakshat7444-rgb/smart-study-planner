@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Database Test | Smart Study Planner{% endblock %}
+
+{% block page_heading %}Database Connection Test{% endblock %}
+
+{% block content %}
+<h2>Subjects:</h2>
+
+    <ol>
+
+        {% for subject in subjects %}
+
+            <li>
+                {{ subject["name"] }}
+            </li>
+
+        {% endfor %}
+
+    </ol>
+{% endblock %}

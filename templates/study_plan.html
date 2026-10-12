@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+
+{% block title %}Study Plan | Smart Study Planner{% endblock %}
+
+{% block page_heading %}Smart Study Plan{% endblock %}
+
+{% block content %}
+<div class="container">
+
+        
+
+        <form
+            action="{{ url_for('generate_plan') }}"
+            method="POST"
+        >
+            <button type="submit">
+                Generate Study Plan
+            </button>
+        </form>
+
+        {% if sessions %}
+
+            {% set current_date = namespace(value='') %}
+
+            {% for session in sessions %}
+
+                {% if session["session_date"] != current_date.value %}
+
+                    {% set current_date.value = session["session_date"] %}
+
+                    <div class="study-date">
+
+                        <h2>
+                            {{ session["session_date"] }}
+                        </h2>
+
+                        <div class="daily-summary">
+
+                            <span>
+                                {{ daily_summary[
+                                    session["session_date"]
+                                ]["session_count"] }}
+                                sessions
+                            </span>
+
+                            <span>
+                                {{ daily_summary[
+                                    session["session_date"]
+                                ]["total_minutes"] }}
+                                minutes
+                            </span>
+
+                            <span>
+                                {{
+                                    (
+                                        daily_summary[
+                                            session["session_date"]
+                                        ]["total_minutes"] / 60
+                                    ) | round(1)
+                                }}
+                                hours
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+                <div class="study-session">
+
+                    <div>
+                        <strong>
+                            {{ session["start_time"] }}
+                        </strong>
+                    </div>
+
+                    <div>
+                        <strong>
+                            {{ session["subject_name"] }}
+                        </strong>
+
+                        <p>
+                            {{ session["topic_name"] }}
+                        </p>
+                    </div>
+
+                    <div>
+                        {{ session["duration_minutes"] }} min
+                    </div>
+
+                    <div>
+                        <span class="status">
+                            {{ session["status"] }}
+                        </span>
+                    </div>
+
+                    <div class="session-actions">
+
+                        <form
+                            action="{{
+                                url_for(
+                                    'update_session_status',
+                                    session_id=session["session_id"]
+                                )
+                            }}"
+                            method="POST"
+                        >
+                            <input
+                                type="hidden"
+                                name="status"
+                                value="Completed"
+                            >
+
+                            <button
+                                type="submit"
+                                class="complete-button"
+                            >
+                                Complete
+                            </button>
+                        </form>
+
+                        <form
+                            action="{{
+                                url_for(
+                                    'update_session_status',
+                                    session_id=session["session_id"]
+                                )
+                            }}"
+                            method="POST"
+                        >
+                            <input
+                                type="hidden"
+                                name="status"
+                                value="Skipped"
+                            >
+
+                            <button
+                                type="submit"
+                                class="skip-button"
+                            >
+                                Skip
+                            </button>
+                        </form>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="empty-state">
+
+                <h2>No Study Plan Yet</h2>
+
+                <p>
+                    Generate your personalized study plan
+                    to see your sessions here.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+{% endblock %}
