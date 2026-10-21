@@ -1,6 +1,7 @@
 from scheduler import save_generated_plan
 from flask import Flask, render_template, request, redirect, url_for, g
 import sqlite3
+from datetime import date
 from datetime import datetime
 from pathlib import Path
 
@@ -386,82 +387,116 @@ def topics(subject_id):
 # TOPICS - ADD
 # --------------------------------------------------
 
-@app.route("/subjects/<int:subject_id>/topics/add",
-           methods=["GET", "POST"])
+@app.route(
+    "/subjects/<int:subject_id>/topics/add",
+    methods=["GET", "POST"]
+)
 def add_topic(subject_id):
-
     db = get_db()
 
-    # Check whether subject exists
-    subject_cursor = db.execute("""
+    subject = db.execute(
+        """
         SELECT subject_id, name
         FROM subjects
-        WHERE subject_id = ?
-        AND student_id = ?
-    """, (subject_id, 1))
-
-    subject = subject_cursor.fetchone()
+        WHERE subject_id = ? AND student_id = ?
+        """,
+        (subject_id, 1),
+    ).fetchone()
 
     if subject is None:
         return "Subject not found", 404
 
+    error = None
+    form_data = {
+        "name": "",
+        "description": "",
+        "difficulty": "3",
+        "priority": "3",
+        "estimated_hours": "",
+    }
+
     if request.method == "POST":
+        form_data = {
+            "name": request.form.get("name", "").strip(),
+            "description": request.form.get("description", "").strip(),
+            "difficulty": request.form.get("difficulty", "").strip(),
+            "priority": request.form.get("priority", "").strip(),
+            "estimated_hours": request.form.get(
+                "estimated_hours", ""
+            ).strip(),
+        }
 
-        name = request.form["name"].strip()
-        description = request.form["description"].strip()
-
-        difficulty = int(request.form["difficulty"])
-        priority = int(request.form["priority"])
-        estimated_hours = float(request.form["estimated_hours"])
+        name = form_data["name"]
+        description = form_data["description"]
 
         if not name:
-            return "Topic name is required", 400
+            error = "Topic name is required."
 
-        if difficulty < 1 or difficulty > 5:
-            return "Difficulty must be between 1 and 5", 400
+        difficulty = None
+        priority = None
+        estimated_hours = None
 
-        if priority < 1 or priority > 5:
-            return "Priority must be between 1 and 5", 400
-
-        if estimated_hours <= 0:
-            return "Estimated hours must be greater than 0", 400
-
-        try:
-
-            db.execute("""
-                INSERT INTO topics
-                (
-                    subject_id,
-                    name,
-                    description,
-                    difficulty,
-                    priority,
-                    estimated_hours
+        if error is None:
+            try:
+                difficulty = int(form_data["difficulty"])
+                priority = int(form_data["priority"])
+                estimated_hours = float(
+                    form_data["estimated_hours"]
                 )
-                VALUES (?, ?, ?, ?, ?, ?)
-            """, (
-                subject_id,
-                name,
-                description,
-                difficulty,
-                priority,
-                estimated_hours
-            ))
+            except ValueError:
+                error = "Enter valid numeric values for all fields."
 
-            db.commit()
+        if error is None and not 1 <= difficulty <= 5:
+            error = "Difficulty must be between 1 and 5."
 
-        except sqlite3.IntegrityError:
-            return "A topic with this name already exists.", 400
+        if error is None and not 1 <= priority <= 5:
+            error = "Priority must be between 1 and 5."
 
-        return redirect(
-            url_for("topics", subject_id=subject_id)
-        )
+        if error is None and not (
+            0 < estimated_hours <= 10000
+        ):
+            error = "Estimated hours must be greater than 0."
+
+        if error is None:
+            try:
+                db.execute(
+                    """
+                    INSERT INTO topics (
+                        subject_id,
+                        name,
+                        description,
+                        difficulty,
+                        priority,
+                        estimated_hours
+                    )
+                    VALUES (?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        subject_id,
+                        name,
+                        description,
+                        difficulty,
+                        priority,
+                        estimated_hours,
+                    ),
+                )
+                db.commit()
+
+            except sqlite3.IntegrityError:
+                db.rollback()
+                error = "A topic with this name already exists."
+
+            if error is None:
+                return redirect(
+                    url_for("topics", subject_id=subject_id)
+                )
 
     return render_template(
         "add_topic.html",
-        subject=subject
+        subject=subject,
+        error=error,
+        form_data=form_data,
     )
-
 
 # --------------------------------------------------
 # TOPICS - EDIT
@@ -974,59 +1009,105 @@ def availability():
 
 @app.route("/availability/add", methods=["GET", "POST"])
 def add_availability():
-
     db = get_db()
+    error = None
+    form_data = {
+        "available_date": "",
+        "available_hours": "",
+        "start_time": "",
+        "end_time": "",
+    }
 
     if request.method == "POST":
+        form_data = {
+            "available_date": request.form.get(
+                "available_date", ""
+            ).strip(),
+            "available_hours": request.form.get(
+                "available_hours", ""
+            ).strip(),
+            "start_time": request.form.get(
+                "start_time", ""
+            ).strip(),
+            "end_time": request.form.get(
+                "end_time", ""
+            ).strip(),
+        }
 
-        available_date = request.form["available_date"]
-        available_hours = float(
-            request.form["available_hours"]
-        )
-        start_time = request.form["start_time"]
-        end_time = request.form["end_time"]
+        available_date = form_data["available_date"]
+        hours_raw = form_data["available_hours"]
+        start_time = form_data["start_time"]
+        end_time = form_data["end_time"]
 
-        # ------------------------------
-        # Validation
-        # ------------------------------
+        if not available_date or not hours_raw:
+            error = "Date and available hours are required."
 
-        if not available_date:
-            return "Date is required", 400
+        else:
+            try:
+                selected_date = date.fromisoformat(available_date)
+            except ValueError:
+                error = "Please enter a valid date."
 
-        if available_hours < 0:
-            return "Available hours cannot be negative", 400
+        if error is None and selected_date < date.today():
+            error = "Past dates are not allowed."
 
-        if start_time and end_time and start_time >= end_time:
-            return "End time must be after start time", 400
+        available_hours = None
 
-        try:
+        if error is None:
+            try:
+                available_hours = float(hours_raw)
+            except ValueError:
+                error = "Available hours must be a valid number."
 
-            db.execute("""
-                INSERT INTO availability
-                (
-                    student_id,
-                    available_date,
-                    available_hours,
-                    start_time,
-                    end_time
+        if error is None and not 0 < available_hours <= 24:
+            error = "Available hours must be greater than 0 and at most 24."
+
+        if error is None and bool(start_time) != bool(end_time):
+            error = "Enter both times or leave both empty."
+
+        if (
+            error is None
+            and start_time
+            and end_time
+            and start_time >= end_time
+        ):
+            error = "End time must be after start time."
+
+        if error is None:
+            try:
+                db.execute(
+                    """
+                    INSERT INTO availability (
+                        student_id,
+                        available_date,
+                        available_hours,
+                        start_time,
+                        end_time
+                    )
+                    VALUES (?, ?, ?, ?, ?)
+                    """,
+                    (
+                        1,
+                        available_date,
+                        available_hours,
+                        start_time or None,
+                        end_time or None,
+                    ),
                 )
-                VALUES (?, ?, ?, ?, ?)
-            """, (
-                1,
-                available_date,
-                available_hours,
-                start_time,
-                end_time
-            ))
+                db.commit()
 
-            db.commit()
+            except sqlite3.IntegrityError:
+                db.rollback()
+                error = "Availability already exists for this date."
 
-        except sqlite3.IntegrityError:
-            return "Availability already exists for this date.", 400
+            if error is None:
+                return redirect(url_for("availability"))
 
-        return redirect(url_for("availability"))
-
-    return render_template("add_availability.html")
+    return render_template(
+        "add_availability.html",
+        error=error,
+        form_data=form_data,
+    )
 
 
 # --------------------------------------------------
@@ -1659,6 +1740,7 @@ def study_plan():
             ON t.subject_id = s.subject_id
         WHERE ss.student_id = ?
         AND ss.status = 'Planned'
+        AND date(ss.session_date) >= date('now', 'localtime')
         ORDER BY ss.session_date, ss.start_time
         """,
         (1,)
@@ -1675,6 +1757,7 @@ def study_plan():
         FROM study_sessions
         WHERE student_id = ?
         AND status = 'Planned'
+        AND date(session_date) >= date('now', 'localtime')
         GROUP BY session_date
         ORDER BY session_date
         """,

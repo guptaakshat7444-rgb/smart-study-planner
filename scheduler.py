@@ -133,9 +133,10 @@ def load_availability(student_id):
             end_time
         FROM availability
         WHERE student_id = ?
+        AND date(available_date) >= date(?)
         ORDER BY available_date, start_time
         """,
-        (student_id,)
+        (student_id, date.today().isoformat())
     ).fetchall()
 
     conn.close()

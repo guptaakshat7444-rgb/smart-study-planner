@@ -6,89 +6,91 @@
 
 {% block content %}
 <div class="container">
+    <h2>{{ subject["name"] }}</h2>
 
-        
+    {% if error %}
+        <p class="error-message" role="alert">{{ error }}</p>
+    {% endif %}
 
-        <h2>{{ subject["name"] }}</h2>
-
-        <form method="POST">
-
-            <label>Topic Name</label>
-            <br>
-
-            <input
-                type="text"
-                name="name"
-                placeholder="Enter topic name"
-                required
-            >
-
-            <br><br>
-
-            <label>Description</label>
-            <br>
-
-            <textarea
-                name="description"
-                placeholder="Enter topic description"
-            ></textarea>
-
-            <br><br>
-
-            <label>Difficulty (1-5)</label>
-            <br>
-
-            <input
-                type="number"
-                name="difficulty"
-                min="1"
-                max="5"
-                value="3"
-                required
-            >
-
-            <br><br>
-
-            <label>Priority (1-5)</label>
-            <br>
-
-            <input
-                type="number"
-                name="priority"
-                min="1"
-                max="5"
-                value="3"
-                required
-            >
-
-            <br><br>
-
-            <label>Estimated Hours</label>
-            <br>
-
-            <input
-                type="number"
-                name="estimated_hours"
-                min="0.5"
-                step="0.5"
-                placeholder="Example: 4"
-                required
-            >
-
-            <br><br>
-
-            <button type="submit">
-                Add Topic
-            </button>
-
-        </form>
-
+    <form method="POST">
+        <label for="topic-name">Topic Name</label>
         <br>
+        <input
+            type="text"
+            id="topic-name"
+            name="name"
+            placeholder="Enter topic name"
+            value="{{ form_data.name }}"
+            required
+        >
 
-        <a href="{{ url_for('topics',
-                            subject_id=subject['subject_id']) }}">
-            Back to Topics
-        </a>
+        <br><br>
 
-    </div>
+        <label for="topic-description">Description</label>
+        <br>
+        <textarea
+            id="topic-description"
+            name="description"
+            placeholder="Enter topic description"
+        >{{ form_data.description }}</textarea>
+
+        <br><br>
+
+        <label for="topic-difficulty">Difficulty (1-5)</label>
+        <br>
+        <input
+            type="number"
+            id="topic-difficulty"
+            name="difficulty"
+            min="1"
+            max="5"
+            step="1"
+            value="{{ form_data.difficulty }}"
+            required
+        >
+
+        <br><br>
+
+        <label for="topic-priority">Priority (1-5)</label>
+        <br>
+        <input
+            type="number"
+            id="topic-priority"
+            name="priority"
+            min="1"
+            max="5"
+            step="1"
+            value="{{ form_data.priority }}"
+            required
+        >
+
+        <br><br>
+
+        <label for="topic-hours">Estimated Hours</label>
+        <br>
+        <input
+            type="number"
+            id="topic-hours"
+            name="estimated_hours"
+            min="0.5"
+            step="0.5"
+            placeholder="Example: 4"
+            value="{{ form_data.estimated_hours }}"
+            required
+        >
+
+        <br><br>
+
+        <button type="submit">Add Topic</button>
+    </form>
+
+    <br>
+
+    <a href="{{ url_for(
+        'topics',
+        subject_id=subject['subject_id']
+    ) }}">
+        Back to Topics
+    </a>
+</div>
 {% endblock %}

@@ -7,85 +7,80 @@
 {% block content %}
 <div class="container">
 
-        
 
-        <a href="{{ url_for('add_availability') }}">
-            <button>Add Availability</button>
-        </a>
 
-        <br><br>
+    <a href="{{ url_for('add_availability') }}">
+        <button>Add Availability</button>
+    </a>
 
-        {% if availability %}
+    <br><br>
 
-            {% for item in availability %}
+    {% if availability %}
 
-                <div class="availability-card">
+    {% for item in availability %}
 
-                    <h2>
-                        {{ item["available_date"] }}
-                    </h2>
+    <div class="availability-card">
 
-                    <p>
-                        <strong>Available Hours:</strong>
-                        {{ item["available_hours"] }}
-                    </p>
+        <h2>
+            {{ item["available_date"] }}
+        </h2>
 
-                    <p>
-                        <strong>Start Time:</strong>
-                        {{ item["start_time"] or "Not specified" }}
-                    </p>
+        <p>
+            <strong>Available Hours:</strong>
+            {{ item["available_hours"] }}
+        </p>
 
-                    <p>
-                        <strong>End Time:</strong>
-                        {{ item["end_time"] or "Not specified" }}
-                    </p>
+        <p>
+            <strong>Start Time:</strong>
+            {{ item["start_time"] or "Not specified" }}
+        </p>
 
-                    <a href="{{ url_for(
-                        'edit_availability',
-                        availability_id=item['availability_id']
-                    ) }}">
-                        Edit
-                    </a>
+        <p>
+            <strong>End Time:</strong>
+            {{ item["end_time"] or "Not specified" }}
+        </p>
 
-                    <form
-                        action="{{ url_for(
+        <a
+    href="{{ url_for('edit_availability', availability_id=item['availability_id']) }}"
+    class="action-btn"
+>
+    Edit
+</a>
+
+        <form action="{{ url_for(
                             'delete_availability',
                             availability_id=item['availability_id']
-                        ) }}"
-                        method="POST"
-                        style="display:inline;"
-                    >
+                        ) }}" method="POST" style="display:inline;">
 
-                        <button
-                            type="submit"
-                            onclick="return confirm(
-                                'Delete this availability?'
-                            )"
-                        >
-                            Delete
-                        </button>
+            <button
+    type="submit"
+    class="action-btn"
+    onclick="return confirm('Delete this availability?')"
+>
+    Delete
+</button>
 
-                    </form>
-
-                </div>
-
-                <hr>
-
-            {% endfor %}
-
-        {% else %}
-
-            <p>
-                No availability has been added.
-            </p>
-
-        {% endif %}
-
-        <br>
-
-        <a href="{{ url_for('home') }}">
-            Back to Home
-        </a>
+        </form>
 
     </div>
+
+    <hr>
+
+    {% endfor %}
+
+    {% else %}
+
+    <p>
+        No availability has been added.
+    </p>
+
+    {% endif %}
+
+    <br>
+
+    <a href="{{ url_for('home') }}">
+        Back to Home
+    </a>
+
+</div>
 {% endblock %}
